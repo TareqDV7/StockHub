@@ -1,0 +1,183 @@
+﻿@model DashboardViewModel
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+
+@* <link href="https://preview.keenthemes.com/metronic8/assets/plugins/global/plugins.bundle.css" rel="stylesheet" />
+<link href="https://preview.keenthemes.com/metronic8/assets/css/style.bundle.css" rel="stylesheet" />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://preview.keenthemes.com/metronic8/assets/plugins/global/plugins.bundle.js"></script>
+<script src="https://preview.keenthemes.com/metronic8/assets/js/scripts.bundle.js"></script> *@
+
+<div class="container mt-5">
+    <!-- KPIs -->
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="card card-stretch">
+                <div class="card-body text-center">
+                    <h3>@Model.TotalWarehouses</h3>
+                    <p>Total Warehouses</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="card card-stretch">
+                <div class="card-body text-center">
+                    <h3>@Model.TotalItems</h3>
+                    <p>Total Items</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="card card-stretch">
+                <div class="card-body text-center">
+                    <h3>@Model.TotalEmployees</h3>
+                    <p>Total Employees</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="card card-stretch">
+                <div class="card-body text-center">
+                    <h3>@Model.TotalOrders</h3>
+                    <p>Total Orders</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="row mt-5">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Order Status</h3>
+                </div>
+                <div class="card-body">
+                    <canvas id="orderStatusChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Beneficiary Status</h3>
+                </div>
+                <div class="card-body">
+                    <canvas id="beneficiaryStatusChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tables -->
+    <div class="row mt-5">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Items</h3>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Contents</th>
+                                <th>Quantity</th>
+                                <th>Warehouse</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Items != null && Model.Items.Any())
+                            {
+                                @foreach (var item in Model.Items.OrderByDescending(i => i.CreatedOn).Take(4))
+                                {
+                                    <tr>
+                                        <td>@item.Name</td>
+                                        <td>@item.Contents</td>
+                                        <td>@item.Quantity</td>
+                                        <td>@item.Warehouse?.Name</td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="4">No items available</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Employees</h3>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Phone</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var employee in Model.Employees.OrderByDescending(i => i.CreatedOn).Take(4))
+                            {
+                                <tr>
+                                    <td>@employee.Name</td>
+                                    <td>@employee.Email</td>
+                                    <td>@employee.Role</td>
+                                    <td>@employee.Phone</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Order Status Chart
+        var ctx1 = document.getElementById('orderStatusChart').getContext('2d');
+        new Chart(ctx1, {
+            type: 'pie',
+            data: {
+                labels: ['Pending', 'Completed', 'Archived'],
+                datasets: [{
+                    data: [@Model.PendingOrders, @Model.CompletedOrders, @Model.ArchivedOrders],
+                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
+                }]
+            }
+        });
+
+        // Beneficiary Status Chart
+        var ctx2 = document.getElementById('beneficiaryStatusChart').getContext('2d');
+        new Chart(ctx2, {
+            type: 'doughnut',
+            data: {
+                labels: ['Pending', 'Approved', 'Collected'],
+                datasets: [{
+                    data: [
+        @Model.TotalBeneficiaries - @Model.CollectedBeneficiaries,
+        @Model.TotalBeneficiaries / 2, // Example Approved
+        @Model.CollectedBeneficiaries
+                    ],
+                    backgroundColor: ['#FF6384', '#36A2EB', '#4CAF50']
+                }]
+            }
+        });
+    </script>
+}

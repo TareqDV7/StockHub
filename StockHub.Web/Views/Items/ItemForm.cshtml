@@ -1,0 +1,44 @@
+﻿@model ItemFormViewModel
+
+<form method="post" asp-action="@(Model?.Id > 0 ? "Edit" : "Create")"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-begin="onModalBegin"
+      data-ajax-success="onModalSuccess"
+      data-ajax-failure="ShowErrorMessage"
+      data-ajax-complete="onModalComplete">
+    @if (Model?.Id > 0)
+    {
+        <input type="hidden" asp-for="Id" />
+    }
+    <div class="mb-5">
+        <div class="form-floating mb-2">
+            <input type="text" class="form-control" placeholder="WarehouseId" asp-for="WarehouseId" />
+            <label asp-for="WarehouseId"></label>
+        </div>
+        <span asp-validation-for="WarehouseId" class="text-danger d-block"></span>
+    </div>
+    <div class="mb-5">
+        <div class="form-floating mb-2">
+            <input type="text" class="form-control" placeholder="Name" asp-for="Name" />
+            <label asp-for="Name"></label>
+        </div>
+        <span asp-validation-for="Name" class="text-danger d-block"></span>
+    </div>
+    <div class="mb-5">
+        <div class="form-floating mb-2">
+            <input type="text" class="form-control" placeholder="Contents" asp-for="Contents" />
+            <label asp-for="Contents"></label>
+        </div>
+        <span asp-validation-for="Contents" class="text-danger d-block"></span>
+    </div>
+    <div class="mb-5">
+        <div class="form-floating mb-2">
+            <input type="number" class="form-control" placeholder="Quantity" asp-for="Quantity" />
+            <label asp-for="Quantity"></label>
+        </div>
+        <span asp-validation-for="Quantity" class="text-danger d-block"></span>
+    </div>
+    <partial name="_ModalFooter" />
+
+</form>

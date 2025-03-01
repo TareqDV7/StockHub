@@ -1,0 +1,53 @@
+﻿@model BeneficiaryFormModel
+@{
+    ViewData["Title"] = "Beneficiary Form";
+}
+
+<form method="post" asp-action="@(Model?.Id > 0 ? "Edit" : "Create")"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-begin="onModalBegin"
+      data-ajax-success="onModalSuccess"
+      data-ajax-failure="ShowErrorMessage"
+      data-ajax-complete="onModalComplete">
+    @if (Model?.Id > 0)
+    {
+        <input type="hidden" asp-for="Id" />
+    }
+    <div class="form-group">
+        <label for="warehouse">Warehouse</label>
+        <input asp-for="WarehouseId" class="form-control" placeholder="Enter Warehouse" required />
+        <span asp-validation-for="WarehouseId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="Name">Full Name</label>
+        <input asp-for="Name" class="form-control" placeholder="Enter full name" required />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="Phone">Phone Number</label>
+        <input asp-for="Phone" class="form-control" placeholder="Enter phone number" required />
+        <span asp-validation-for="Phone" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="Address">Address</label>
+        <textarea asp-for="Address" class="form-control" placeholder="Enter address" required></textarea>
+        <span asp-validation-for="Address" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="IdentityNumber">Identity Number</label>
+        <input asp-for="IdentityNumber" class="form-control" placeholder="Enter identity number" required />
+        <span asp-validation-for="IdentityNumber" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="FamilyMembers">Family Members</label>
+        <input asp-for="FamilyMembers" type="number" class="form-control" placeholder="Enter number of family members" required />
+        <span asp-validation-for="FamilyMembers" class="text-danger"></span>
+    </div>
+
+    <partial name="_ModalFooter" />
+
+</form>

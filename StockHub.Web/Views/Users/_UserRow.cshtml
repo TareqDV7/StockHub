@@ -1,0 +1,79 @@
+﻿@model ApplicationUser
+
+<tr>
+    <td>@Model.FullName</td>
+    <td>@Model.UserName</td>
+    <td>@Model.Email</td>
+    <td>
+        <span class="badge badge-light-@(Model.IsDeleted ? "danger" : "success") js-status">
+            @(Model.IsDeleted ? "Deleted" : "Available")
+        </span>
+    </td>
+    <td>@Model.CreatedOn</td>
+    <td class="js-updated-on">@Model.LastUpdatedOn</td>
+    @* <td>
+        <div class="dropdown">
+            <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style=" color: white; border: none; border-radius: 5px; padding: 10px;">
+                <i class="fa-solid fa-cog"></i>
+                <span class="caret" style="color: black;"></span>
+            </button>
+
+            <ul class="dropdown-menu" style="border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                <li>
+                    <a href="javascript:;" class="menu-link px-3 js-render-modal"
+                       data-title="Edit Users" data-url="/Users/Edit/@Model.Id"
+                       data-update="true">
+                        Edit
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:;" class="menu-link flex-stack px-3 js-toggle-status"
+                       data-url="/Users/ToggleStatus/@Model.Id">
+                        Toggle Status
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript:;" class="menu-link flex-stack px-3 js-confirm"
+                       data-url="/Users/UnlockUser/@Model.Id" data-message="Are you sure that you need to unlock this user?"
+                       data-update="true">
+                        Unlock User
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </td> *@
+    <td>
+        <div class="dropdown">
+            <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style=" color: white; border: none; border-radius: 5px; padding: 10px;">
+                <i class="fa-solid fa-cog"></i>
+                <span class="caret" style="color: black;"></span>
+            </button>
+
+            <ul class="dropdown-menu" style="border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                <li>
+                    <a class="btn btn-sm btn-outline btn-outline-dashed btn-active-light-primary js-render-modal"
+                       href="javascript:;"
+                       data-title="Edit User"
+                       data-url="/Users/Edit/@Model.Id" data-update="true"
+                       style="transition: background-color 0.3s; padding: 8px 12px; display: block; text-align: center; border-radius: 5px;">
+                        Edit
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item js-toggle-status btn btn-sm btn-outline btn-outline-dashed btn-active-light-primary"
+                       href="javascript:;" data-url="/Users/ToggleStatus/@Model.Id" style="padding: 10px;">
+                        Toggle Status
+                    </a>
+                   
+                </li>
+                <li>
+                    <a href="javascript:;" class="dropdown-item js-toggle-status btn btn-sm btn-outline btn-outline-dashed btn-active-light-primary flex-stack px-3 js-confirm"
+                       data-url="/Users/UnlockUser/@Model.Id" data-message="Are you sure that you need to unlock this user?"
+                       data-update="true" style="padding: 10px;">
+                        Unlock User
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </td>
+</tr>

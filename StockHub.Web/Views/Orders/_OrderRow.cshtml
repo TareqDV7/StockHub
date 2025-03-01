@@ -1,0 +1,52 @@
+﻿@using Bookify.Web.Core.Consts
+@model Order
+
+<tr>
+    <td>@Model.RequestDate</td>
+    <td>@Model.FulfilledDate</td>
+    <td>
+        <span class="badge badge-light-@(Model.Status == "Pending" ? "warning" : "success") js-status">
+            @(Model.Status == "Pending" ? "Pending" : "Completed")
+        </span>
+    </td>
+    @if (User.IsInRole(AppRoles.Admin) || User.IsInRole(AppRoles.WarehouseManager))
+    {
+    <td>@Model.BeneficiaryId</td>
+        
+    }
+    @if (User.IsInRole(AppRoles.Admin) || User.IsInRole(AppRoles.beneficiary))
+    {
+
+    <td>@Model.Warehouse.Name</td>
+    }
+    <td>
+        <div class="dropdown">
+            <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style=" color: white; border: none; border-radius: 5px; padding: 10px;">
+                <i class="fa-solid fa-cog"></i>
+                <span class="caret" style="color: black;"></span>
+            </button>
+
+            <ul class="dropdown-menu" style="border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                <li>
+                    <a class="btn btn-sm btn-outline btn-outline-dashed btn-active-light-primary js-render-modal"
+                       href="javascript:;"
+                       data-title="Edit Order"
+                       data-url="/Orders/Edit/@Model.OrderId" data-update="true"
+                       style="transition: background-color 0.3s; padding: 8px 12px; display: block; text-align: center; border-radius: 5px;">
+                        Edit
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item js-toggle-status-order btn btn-sm btn-outline btn-outline-dashed btn-active-light-primary"
+                       href="javascript:;"
+                       data-url="/Orders/ChangeStatus/@Model.OrderId"
+                       data-id="@Model.OrderId"
+                       style="padding: 10px;">
+                        Toggle Status
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </td>
+</tr>
+

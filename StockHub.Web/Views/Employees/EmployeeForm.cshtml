@@ -1,0 +1,52 @@
+﻿@model EmployeeFormViewModel
+
+<form method="post" asp-action="@(Model?.Id > 0 ? "Edit" : "Create")"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-begin="onModalBegin"
+      data-ajax-success="onModalSuccess"
+      data-ajax-failure="ShowErrorMessage"
+      data-ajax-complete="onModalComplete">
+    @if (Model?.Id > 0)
+    {
+        <input type="hidden" asp-for="Id" />
+    }
+    <div class="mb-5">
+        <div class="form-floating mb-2">
+            <input type="text" class="form-control" placeholder="WarehouseId" asp-for="WarehouseId" />
+            <label asp-for="WarehouseId"></label>
+        </div>
+        <span asp-validation-for="WarehouseId" class="text-danger d-block"></span>
+    </div>
+    <div class="mb-5">
+        <div class="form-floating mb-2">
+            <input type="text" class="form-control" placeholder="Name" asp-for="Name" />
+            <label asp-for="Name"></label>
+        </div>
+        <span asp-validation-for="Name" class="text-danger d-block"></span>
+    </div>
+    <div class="mb-5">
+        <div class="form-floating mb-2">
+            <input type="email" class="form-control" placeholder="Email" asp-for="Email" />
+            <label asp-for="Email"></label>
+        </div>
+        <span asp-validation-for="Email" class="text-danger d-block"></span>
+    </div>
+    <div class="mb-5">
+        <div class="form-floating mb-2">
+            <input type="text" class="form-control" placeholder="Role" asp-for="Role" />
+            <label asp-for="Role"></label>
+        </div>
+        <span asp-validation-for="Role" class="text-danger d-block"></span>
+    </div>  
+    <div class="mb-5">
+        <div class="form-floating mb-2">
+            <input type="text" class="form-control" placeholder="Phone" asp-for="Phone" />
+            <label asp-for="Phone"></label>
+        </div>
+        <span asp-validation-for="Phone" class="text-danger d-block"></span>
+    </div>
+
+    <partial name="_ModalFooter" />
+
+</form>

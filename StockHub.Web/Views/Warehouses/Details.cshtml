@@ -1,0 +1,388 @@
+﻿@model Warehouse
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+@section Styles
+{
+    <link rel="stylesheet" href="~/assets/plugins/datatables.bundle.css" />
+}
+
+<div class="content flex-column-fluid" id="kt_content">
+    <!--begin::Navbar-->
+    <div class="card mb-9">
+        <div class="card-body pt-9 pb-0">
+            <!--begin::Details-->
+            <div class="d-flex flex-wrap flex-sm-nowrap mb-6">
+                <!--begin::Wrapper-->
+                <div class="flex-grow-1">
+                    <!--begin::Head-->
+                    <div class="d-flex justify-content-between align-items-start flex-wrap mb-2">
+                        <div class="d-flex flex-column">
+                            <div class="d-flex align-items-center mb-1">
+                                <a href="#" class="text-gray-800 text-hover-primary fs-2 fw-bold me-3" id="warehouse-name">@Model.Name</a>
+                                <span class="badge badge-light-@(Model.IsDeleted ? "danger" : "success") me-auto">
+                                    @(Model.IsDeleted ? "Deleted" : "Active")
+                                </span>
+                            </div>
+                            <div class="d-flex flex-wrap fw-semibold mb-1 fs-5 text-gray-400">
+                                <span class="svg-icon svg-icon-muted svg-icon-2">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                        <path opacity="0.3" d="M18.0624 15.3453L13.1624 20.7453C12.5624 21.4453 11.5624 21.4453 10.9624 20.7453L6.06242 15.3453C4.56242 13.6453 3.76242 11.4453 4.06242 8.94534C4.56242 5.34534 7.46242 2.44534 11.0624 2.04534C15.8624 1.54534 19.9624 5.24534 19.9624 9.94534C20.0624 12.0453 19.2624 13.9453 18.0624 15.3453Z" fill="currentColor" />
+                                        <path d="M12.0624 13.0453C13.7193 13.0453 15.0624 11.7022 15.0624 10.0453C15.0624 8.38849 13.7193 7.04535 12.0624 7.04535C10.4056 7.04535 9.06241 8.38849 9.06241 10.0453C9.06241 11.7022 10.4056 13.0453 12.0624 13.0453Z" fill="currentColor" />
+                                    </svg>
+                                </span>
+                                <span class="ms-2 text-primary" id="warehouse-location">@Model.Location</span>
+                            </div>
+                        </div>
+                        <div class="d-flex mb-4">
+                            <button class="btn btn-primary me-3" id="edit-btn">Edit</button>
+                        </div>
+                    </div>                    <!--end::Head-->
+                    <!--begin::Info-->
+                    <div class="d-flex flex-wrap justify-content-start">
+                        <!--begin::Stats-->
+                        <div class="d-flex flex-wrap">
+                            <!--begin::Stat-->
+                            <div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
+                                <!--begin::Number-->
+                                <div class="d-flex align-items-center">
+                                    <span class="svg-icon svg-icon-3 svg-icon-primary me-2">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M21 10H13V11C13 11.6 12.6 12 12 12C11.4 12 11 11.6 11 11V10H3C2.4 10 2 10.4 2 11V13H22V11C22 10.4 21.6 10 21 10Z" fill="currentColor" />
+                                            <path opacity="0.3" d="M12 12C11.4 12 11 11.6 11 11V3C11 2.4 11.4 2 12 2C12.6 2 13 2.4 13 3V11C13 11.6 12.6 12 12 12Z" fill="currentColor" />
+                                            <path opacity="0.3" d="M18.1 21H5.9C5.4 21 4.9 20.6 4.8 20.1L3 13H21L19.2 20.1C19.1 20.6 18.6 21 18.1 21ZM13 18V15C13 14.4 12.6 14 12 14C11.4 14 11 14.4 11 15V18C11 18.6 11.4 19 12 19C12.6 19 13 18.6 13 18Z" fill="currentColor" />
+                                        </svg>
+                                    </span>
+                                    <div id="ItemsCount" class="fs-7 fw-bold" data-kt-countup="true" data-kt-countup-value="@Model.Items.Count()">0</div>
+                                </div>
+                                <!--end::Number-->
+                                <!--begin::Label-->
+                                <div class="fw-semibold fs-6 text-gray-400">Items</div>
+                                <!--end::Label-->
+                            </div>
+                            <!--end::Stat-->
+                            <!--begin::Stat-->
+                            <div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
+                                <!--begin::Number-->
+                                <div class="d-flex align-items-center">
+                                    <span class="svg-icon svg-icon-3 svg-icon-primary me-2">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M6.28548 15.0861C7.34369 13.1814 9.35142 12 11.5304 12H12.4696C14.6486 12 16.6563 13.1814 17.7145 15.0861L19.3493 18.0287C20.0899 19.3618 19.1259 21 17.601 21H6.39903C4.87406 21 3.91012 19.3618 4.65071 18.0287L6.28548 15.0861Z" fill="currentColor" />
+                                            <rect opacity="0.3" x="8" y="3" width="8" height="8" rx="4" fill="currentColor" />
+                                        </svg>
+                                    </span>
+                                    <div id="EmployeesCount" class="fs-7 fw-bold" data-kt-countup="true" data-kt-countup-value="@Model.Employees.Count()">0</div>
+                                </div>
+                                <!--end::Number-->
+                                <!--begin::Label-->
+                                <div class="fw-semibold fs-6 text-gray-400">Employees</div>
+                                <!--end::Label-->
+                            </div>
+                            <!--end::Stat-->
+                            <!--begin::Stat-->
+                            <div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
+                                <!--begin::Number-->
+                                <div class="d-flex align-items-center">
+                                    <span class="svg-icon svg-icon-3 svg-icon-primary me-2">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path opacity="0.3" d="M20 3H4C2.89543 3 2 3.89543 2 5V16C2 17.1046 2.89543 18 4 18H4.5C5.05228 18 5.5 18.4477 5.5 19V21.5052C5.5 22.1441 6.21212 22.5253 6.74376 22.1708L11.4885 19.0077C12.4741 18.3506 13.6321 18 14.8167 18H20C21.1046 18 22 17.1046 22 16V5C22 3.89543 21.1046 3 20 3Z" fill="currentColor" />
+                                            <rect x="6" y="12" width="7" height="2" rx="1" fill="currentColor" />
+                                            <rect x="6" y="7" width="12" height="2" rx="1" fill="currentColor" />
+                                        </svg>
+                                    </span>
+                                    <div id="OrdersCount" class="fs-7 fw-bold" data-kt-countup="true" data-kt-countup-value="@Model.Orders.Count()">0</div>
+                                </div>
+                                <!--end::Number-->
+                                <!--begin::Label-->
+                                <div class="fw-semibold fs-6 text-gray-400">Orders</div>
+                                <!--end::Label-->
+                            </div>
+                            <!--end::Stat-->
+                        </div>
+                        <!--end::Stats-->
+                    </div>
+                    <!--end::Info-->
+                </div>
+                <!--end::Wrapper-->
+            </div>
+            <!--end::Details-->
+            <div class="separator"></div>
+            <!--begin::Nav-->
+            <ul class="nav nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-bold">
+                <!--begin::Nav item-->
+                <li class="nav-item">
+                    <a class="nav-link text-active-primary py-5 me-6 active" data-bs-toggle="tab" href="#Items">Items</a>
+                </li>
+                <!--end::Nav item-->
+                <!--begin::Nav item-->
+                <li class="nav-item">
+                    <a class="nav-link text-active-primary py-5 me-6" data-bs-toggle="tab" href="#Employees">Employees</a>
+                </li>
+                <!--end::Nav item-->
+                <!--begin::Nav item-->
+                <li class="nav-item">
+                    <a class="nav-link text-active-primary py-5 me-6" data-bs-toggle="tab" href="#Orders">Orders</a>
+                </li>
+                <!--end::Nav item-->
+            </ul>
+            <!--end::Nav-->
+        </div>
+    </div>
+    <!--end::Navbar-->
+    <div class="tab-content">
+        <!--begin::Card-->
+        <div id="Items" class="card tab-pane fade show active">
+            <!--begin::Card header-->
+            <div class="card-header">
+                <!--begin::Card title-->
+                <div class="card-title fs-3 fw-bold">Items</div>
+                <!--end::Card title-->
+                <div class="card-toolbar">
+                    <a href="javascript:;" class="btn btn-sm btn-primary js-render-modal"
+                       data-title="Add Item" data-url="/Items/Create/">
+                        <i class="bi bi-plus-square-dotted"></i>
+                        Add
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="@(Model.Items.Any() ? "d-none" : string.Empty) alert alert-dismissible bg-light-warning border border-warning border-3 border-dashed d-flex flex-column flex-sm-row w-100 p-5 mb-10 js-alert">
+                    <!--begin::Icon-->
+                    <!--begin::Svg Icon | path: icons/duotune/general/gen007.svg-->
+                    <span class="svg-icon svg-icon-2hx svg-icon-warning me-4 mb-5 mb-sm-0">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21 10H13V11C13 11.6 12.6 12 12 12C11.4 12 11 11.6 11 11V10H3C2.4 10 2 10.4 2 11V13H22V11C22 10.4 21.6 10 21 10Z" fill="currentColor" />
+                            <path opacity="0.3" d="M12 12C11.4 12 11 11.6 11 11V3C11 2.4 11.4 2 12 2C12.6 2 13 2.4 13 3V11C13 11.6 12.6 12 12 12Z" fill="currentColor" />
+                            <path opacity="0.3" d="M18.1 21H5.9C5.4 21 4.9 20.6 4.8 20.1L3 13H21L19.2 20.1C19.1 20.6 18.6 21 18.1 21ZM13 18V15C13 14.4 12.6 14 12 14C11.4 14 11 14.4 11 15V18C11 18.6 11.4 19 12 19C12.6 19 13 18.6 13 18Z" fill="currentColor" />
+                        </svg>
+                    </span>
+                    <!--end::Svg Icon-->
+                    <!--end::Icon-->
+                    <!--begin::Content-->
+                    <div class="d-flex flex-column pe-0 pe-sm-10">
+                        <h5 class="mb-1">No Items</h5>
+                        <span>No items available for this warehouse.</span>
+                    </div>
+                    <!--end::Content-->
+                </div>
+                <div class="card shadow-sm">
+                    <partial name="_SearchAndExport" />
+                    <div class="card-body pt-0">
+                        <div class="table-responsive">
+                            <table id="itemsTable" class="table table-row-dashed table-row-gray-300 gy-2 align-middle js-datatables" data-document-title="Employees">
+                                <thead>
+                                    <tr class="fw-bold fs-6 text-gray-800">
+                                        <th>Name</th>
+                                        <th>Contents</th>
+                                        <th>Quality</th>
+                                        <th>Is Deleted</th>
+
+                                        <th class="js-no-export">Operations</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.Items)
+                                    {
+                                        @await Html.PartialAsync("~/Views/Items/_ItemRow.cshtml", item)
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--end::Card-->
+        <!--begin::Card-->
+        <div id="Employees" class="card tab-pane fade">
+            <!--begin::Card header-->
+            <div class="card-header">
+                <!--begin::Card title-->
+                <div class="card-title fs-3 fw-bold">Employees</div>
+                <!--end::Card title-->
+                <div class="card-toolbar">
+                    <a href="javascript:;" class="btn btn-sm btn-primary js-render-modal"
+                       data-title="Add Employee" data-url="/Employees/Create/">
+                        <i class="bi bi-plus-square-dotted"></i>
+                        Add
+                    </a>
+                </div>
+            </div>
+            <!--end::Card header-->
+            <div class="card-body">
+                <div class="@(Model.Employees.Any() ? "d-none" : string.Empty) alert alert-dismissible bg-light-warning border border-warning border-3 border-dashed d-flex flex-column flex-sm-row w-100 p-5 mb-10 js-alert">
+                    <!--begin::Icon-->
+                    <!--begin::Svg Icon | path: icons/duotune/general/gen007.svg-->
+                    <span class="svg-icon svg-icon-2hx svg-icon-warning me-4 mb-5 mb-sm-0">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect opacity="0.3" x="2" y="2" width="20" height="20" rx="10" fill="currentColor" />
+                            <rect x="11" y="14" width="7" height="2" rx="1" transform="rotate(-90 11 14)" fill="currentColor" />
+                            <rect x="11" y="17" width="2" height="2" rx="1" transform="rotate(-90 11 17)" fill="currentColor" />
+                        </svg>
+                    </span>
+                    <!--end::Svg Icon-->
+                    <!--end::Icon-->
+                    <!--begin::Content-->
+                    <div class="d-flex flex-column pe-0 pe-sm-10">
+                        <h5 class="mb-1">No Employees</h5>
+                        <span>No employees available for this warehouse.</span>
+                    </div>
+                    <!--end::Content-->
+                </div>
+                <div class="card shadow-sm">
+                    <partial name="_SearchAndExport" />
+                    <div class="card-body pt-0">
+                        <div class="table-responsive">
+                            <table id="employeesTable" class="table table-row-dashed table-row-gray-300 gy-2 align-middle js-datatables" data-document-title="Employees">
+                                <thead>
+                                    <tr class="fw-bold fs-6 text-gray-800">
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Role</th>
+                                        <th>Is Deleted</th>
+                                        <th>Phone</th>
+
+                                        <th class="js-no-export">Operations</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var employee in Model.Employees)
+                                    {
+                                        @await Html.PartialAsync("~/Views/Employees/_EmployeeRow.cshtml", employee)
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--begin::Card-->
+        <div id="Orders" class="card tab-pane fade">
+            <!--begin::Card header-->
+            <div class="card-header">
+                <!--begin::Card title-->
+                <div class="card-title fs-3 fw-bold">Orders</div>
+                <!--end::Card title-->
+                <div class="card-toolbar">
+                    <a href="javascript:;" class="btn btn-sm btn-primary js-render-modal"
+                       data-title="Add Order" data-url="/Orders/Create/">
+                        <i class="bi bi-plus-square-dotted"></i>
+                        Add
+                    </a>
+                </div>
+            </div>
+            <!--end::Card header-->
+            <div class="card-body">
+                <div class="@(Model.Orders.Any() ? "d-none" : string.Empty) alert alert-dismissible bg-light-warning border border-warning border-3 border-dashed d-flex flex-column flex-sm-row w-100 p-5 mb-10 js-alert">
+                    <!--begin::Icon-->
+                    <!--begin::Svg Icon | path: icons/duotune/general/gen007.svg-->
+                    <span class="svg-icon svg-icon-2hx svg-icon-warning me-4 mb-5 mb-sm-0">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path opacity="0.3" d="M20 3H4C2.89543 3 2 3.89543 2 5V16C2 17.1046 2.89543 18 4 18H4.5C5.05228 18 5.5 18.4477 5.5 19V21.5052C5.5 22.1441 6.21212 22.5253 6.74376 22.1708L11.4885 19.0077C12.4741 18.3506 13.6321 18 14.8167 18H20C21.1046 18 22 17.1046 22 16V5C22 3.89543 21.1046 3 20 3Z" fill="currentColor" />
+                            <rect x="6" y="12" width="7" height="2" rx="1" fill="currentColor" />
+                            <rect x="6" y="7" width="12" height="2" rx="1" fill="currentColor" />
+                        </svg>
+                    </span>
+                    <!--end::Svg Icon-->
+                    <!--end::Icon-->
+                    <!--begin::Content-->
+                    <div class="d-flex flex-column pe-0 pe-sm-10">
+                        <h5 class="mb-1">No Orders</h5>
+                        <span>No orders available in this warehouse.</span>
+                    </div>
+                    <!--end::Content-->
+                </div>
+                <div class="card shadow-sm">
+                    <div class="card-body pt-0">
+                        <div class="table-responsive">
+                            <table id="ordersTable" class="table table-row-dashed table-row-gray-300 gy-2 align-middle" data-document-title="Employees">
+                                <thead>
+                                    <tr class="fw-bold fs-6 text-gray-800">
+                                        <th>Request Date</th>
+                                        <th>Fullfilled Date</th>
+                                        <th>Status</th>
+                                        <th>Beneficary Id</th>
+                                        <th class="js-no-export">Operations</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var order in Model.Orders)
+                                    {
+                                        @await Html.PartialAsync("~/Views/Orders/_OrderRow.cshtml", order)
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--end::Card-->
+    </div>
+</div>
+@Html.AntiForgeryToken();
+
+@section Plugins
+{
+    <script src="~/assets/plugins/datatables.bundle.js"></script>
+}
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function () {
+            debugger
+            $('.js-datatables').DataTable();
+             $('#edit-btn').click(function () {
+                 debugger
+            let name = $('#warehouse-name').text();
+            let location = $('#warehouse-location').text();
+
+            $('#warehouse-name').replaceWith(`<input type='text' id='warehouse-name-input' value='${name}' class='form-control mb-2'>`);
+            $('#warehouse-location').replaceWith(`<input type='text' id='warehouse-location-input' value='${location}' class='form-control mb-2'>`);
+
+            $(this).replaceWith('<button class="btn btn-success" id="update-btn">Update</button>');
+        });
+
+        $(document).on('click', '#update-btn', function () {
+            debugger
+            let updatedName = $('#warehouse-name-input').val();
+            let updatedLocation = $('#warehouse-location-input').val();
+
+            // Create an object with the data
+            let dataObject = {
+                Id: '@Model.WarehouseId',  // Ensure this is correctly set
+                Name: updatedName,
+                Location: updatedLocation
+            };
+
+            // Debugging log for the dataObject
+            console.log('Data Object:', dataObject);
+
+            $.ajax({
+                url: '/Warehouses/Edit',
+                type: 'POST',
+                contentType: 'application/json',
+                headers: {
+                    'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                },
+                data: JSON.stringify(dataObject), // Pass the object as JSON
+                success: function (response) {
+                    $('#warehouse-name-input').replaceWith(`<a href="#" class="text-gray-800 text-hover-primary fs-2 fw-bold me-3" id="warehouse-name">${updatedName}</a>`);
+                    $('#warehouse-location-input').replaceWith(`<span class="ms-2 text-primary" id="warehouse-location">${updatedLocation}</span>`);
+                    $('#update-btn').replaceWith('<button class="btn btn-primary me-3" id="edit-btn">Edit</button>');
+                },
+                error: function (xhr) {
+                    console.log('Error Response:', xhr.responseText);
+                    alert('Error updating warehouse details.');
+                }
+            });
+        });
+                });
+
+            
+    </script>
+}

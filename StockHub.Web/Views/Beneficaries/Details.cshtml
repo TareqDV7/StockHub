@@ -1,0 +1,301 @@
+﻿@model Beneficiary
+
+@{
+    ViewData["Title"] = "Beneficiary Details";
+}
+
+<div class="alert bg-light-primary border border-primary border-3 border-dashed d-flex justify-content-between w-100 p-5 mb-10">
+    <div class="d-flex align-items-center">
+        <div class="symbol symbol-40px me-4">
+            <div class="symbol-label fs-2 fw-semibold text-success">
+                <span class="svg-icon svg-icon-2 svg-icon-primary">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6.28548 15.0861C7.34369 13.1814 9.35142 12 11.5304 12H12.4696C14.6486 12 16.6563 13.1814 17.7145 15.0861L19.3493 18.0287C20.0899 19.3618 19.1259 21 17.601 21H6.39903C4.87406 21 3.91012 19.3618 4.65071 18.0287L6.28548 15.0861Z" fill="currentColor" />
+                        <rect opacity="0.3" x="8" y="3" width="8" height="8" rx="4" fill="currentColor" />
+                    </svg>
+                </span>
+            </div>
+        </div>
+        <div class="d-flex flex-column pe-0 pe-sm-10">
+            <h5 class="mb-1">Beneficiary Details</h5>
+        </div>
+    </div>
+    <div style="display: flex; gap: 10px;">
+        <div>
+            <a class="btn btn-sm btn-primary"
+               asp-controller="Beneficaries" asp-action="RequestAnOrder" asp-route-id="@Model.Id">
+                <i class="bi bi-plus-square-dotted"></i>
+                Request An Order
+            </a>
+        </div>
+        <div>
+            <a href="javascript:;" class="btn btn-sm btn-warning js-render-modal"
+               data-title=" Edit Personal Data" data-url="/Beneficaries/Edit/@Model.Id">
+                <i class="bi bi-plus-square-dotted"></i>
+                Edit Personal Data
+            </a>
+
+        </div>
+    </div>
+
+</div>
+
+<div class="d-flex flex-column flex-xl-row">
+    <!--begin::Sidebar-->
+    <div class="flex-column flex-lg-row-auto w-100 w-xl-350px mb-10">
+        <!--begin::Card-->
+        <div class="card mb-5 mb-xl-8">
+            <div class="card-body pt-15">
+                <!--begin::Summary-->
+
+                <div class="separator separator-dashed my-3"></div>
+                <div class="pb-5 fs-6">
+                    <div class="fw-bold mt-5">Address</div>
+                    <div class="text-gray-600">@Model.Address</div>
+
+                    <div class="fw-bold mt-5">Identity Number</div>
+                    <div class="text-gray-600">@Model.IdentityNumber</div>
+
+                    <div class="fw-bold mt-5">Phone Number</div>
+                    <div class="text-gray-600">@Model.Phone</div>
+
+                    <div class="fw-bold mt-5">Preferred Warehouse</div>
+                    <div class="text-gray-600">@Model.Warehouse.Name</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--end::Sidebar-->
+    <!--begin::Content-->
+    <div class="flex-lg-row-fluid ms-lg-15">
+        <ul class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-semibold mb-8" role="tablist">
+            <li class="nav-item" role="presentation">
+                <a class="nav-link text-active-primary pb-4 active" data-bs-toggle="tab" href="#Overview" aria-selected="false" role="tab" tabindex="-1">Overview</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab" href="#PendingOrders" aria-selected="true" role="tab">Pending Orders</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab" href="#CompletedOrders" aria-selected="true" role="tab">Completed Orders</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="Overview" role="tabpanel">
+                <div class="row row-cols-1 row-cols-md-2 mb-4">
+                    <div class="col">
+                        <!--begin::Card-->
+                        <div class="card h-100 mb-4">
+                            <div class="card-header border-0">
+                                <h2 class="card-title fw-bold mb-0">Beneficiary Information</h2>
+                            </div>
+                            <div class="card-body">
+                                <div class="fw-bold fs-4">
+                                    <div class="d-flex">
+                                        <div class="ms-2">
+                                            @Model.Name
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="fs-7 fw-normal text-muted mt-2">Additional details of the beneficiary.</div>
+                            </div>
+                        </div>
+                        <!--end::Card-->
+                    </div>
+                </div>
+                <div class="card pt-4 mb-6 mb-xl-9">
+                    <div class="card-header border-0 pt-5">
+                        <h3 class="card-title align-items-start flex-column">
+                            <span class="card-label fw-bold fs-3 mb-1">Beneficiary History</span>
+                        </h3>
+                    </div>
+                    <div class="card-body py-3">
+                        <!-- You can show the history of the beneficiary here -->
+                        History of the beneficiary's status or other data can be placed here.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-content">
+            <div class="tab-pane fade" id="PendingOrders" role="tabpanel">
+                <div class="card-body">
+                    <div class="@(Model.Orders.Where(o => o.Status == "Pending").Any() ? "d-none" : string.Empty) alert alert-dismissible bg-light-warning border border-warning border-3 border-dashed d-flex flex-column flex-sm-row w-100 p-5 mb-10 js-alert">
+                        <!--begin::Icon-->
+                        <!--begin::Svg Icon | path: icons/duotune/general/gen007.svg-->
+                        <span class="svg-icon svg-icon-2hx svg-icon-warning me-4 mb-5 mb-sm-0">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect opacity="0.3" x="2" y="2" width="20" height="20" rx="10" fill="currentColor" />
+                                <rect x="11" y="14" width="7" height="2" rx="1" transform="rotate(-90 11 14)" fill="currentColor" />
+                                <rect x="11" y="17" width="2" height="2" rx="1" transform="rotate(-90 11 17)" fill="currentColor" />
+                            </svg>
+                        </span>
+                        <!--end::Svg Icon-->
+                        <!--end::Icon-->
+                        <!--begin::Content-->
+                        <div class="d-flex flex-column pe-0 pe-sm-10">
+                            <h5 class="mb-1">No Pending Orders</h5>
+                            <span>No pending orders available for this beneficiary.</span>
+                        </div>
+                        <!--end::Content-->
+                    </div>
+                    <div class="card shadow-sm">
+                        <div class="card-body pt-0">
+                            <div class="table-responsive">
+                                <table class="table table-row-dashed table-row-gray-300 gy-2 align-middle " data-document-title="Employees">
+                                    <thead>
+                                        <tr class="fw-bold fs-6 text-gray-800">
+                                            <th>Request Date</th>
+                                            <th>Fulfilled Date</th>
+                                            <th>Status</th>
+                                            <th>Warehouse</th>
+                                            <th class="js-no-export">Operations</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var order in Model.Orders.Where(o => o.Status == "Pending"))
+                                        {
+                                            @await Html.PartialAsync("~/Views/Orders/_OrderRow.cshtml", order)
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="tab-content">
+            <div class="tab-pane fade" id="CompletedOrders" role="tabpanel">
+                <div class="card-body">
+                    <div class="@(Model.Orders.Where(o => o.Status == "Completed").Any() ? "d-none" : string.Empty) alert alert-dismissible bg-light-warning border border-warning border-3 border-dashed d-flex flex-column flex-sm-row w-100 p-5 mb-10 js-alert">
+                        <!--begin::Icon-->
+                        <!--begin::Svg Icon | path: icons/duotune/general/gen007.svg-->
+                        <span class="svg-icon svg-icon-2hx svg-icon-warning me-4 mb-5 mb-sm-0">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect opacity="0.3" x="2" y="2" width="20" height="20" rx="10" fill="currentColor" />
+                                <rect x="11" y="14" width="7" height="2" rx="1" transform="rotate(-90 11 14)" fill="currentColor" />
+                                <rect x="11" y="17" width="2" height="2" rx="1" transform="rotate(-90 11 17)" fill="currentColor" />
+                            </svg>
+                        </span>
+                        <!--end::Svg Icon-->
+                        <!--end::Icon-->
+                        <!--begin::Content-->
+                        <div class="d-flex flex-column pe-0 pe-sm-10">
+                            <h5 class="mb-1">No Completed Orders</h5>
+                            <span>No completed orders available for this beneficiary.</span>
+                        </div>
+                        <!--end::Content-->
+                    </div>
+                    <div class="card shadow-sm">
+                        <div class="card-body pt-0">
+                            <div class="table-responsive">
+                                <table id="completedOrdersTable" class="table table-row-dashed table-row-gray-300 gy-2 align-middle" data-document-title="Employees">
+                                    <thead>
+                                        <tr class="fw-bold fs-6 text-gray-800">
+                                            <th>Request Date</th>
+                                            <th>Fulfilled Date</th>
+                                            <th>Status</th>
+                                            <th>Warehouse</th>
+                                            <th class="js-no-export">Operations</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var order in Model.Orders.Where(o => o.Status == "Completed"))
+                                        {
+                                            @await Html.PartialAsync("~/Views/Orders/_OrderRow.cshtml", order)
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/lib/sweetalert2/dist/sweetalert2.all.min.js"></script>
+    <script src="~/lib/sweetalert2/dist/sweetalert2.min.js"></script>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: '@TempData["SuccessMessage"]',
+                showConfirmButton: false,
+                timer: 2000
+            });
+        </script>
+    }
+
+    <script>
+        $('body').delegate('.js-toggle-status-order', 'click', function () {
+                debugger
+                var btn = $(this);
+
+                // Show SweetAlert confirmation dialog
+                Swal.fire({
+                    title: "Are you sure you need to toggle this item status?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, change it!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Perform the AJAX request to change the status
+                        $.post({
+                            url: btn.data('url'),  // Get the URL for the status toggle
+                            type: 'post',
+                            data: {
+                                '__RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()  // Anti-CSRF token
+                            },
+                            success: function (lastUpdatedOn) {
+                                debugger
+                                // On success, find the corresponding row
+                                var row = btn.parents('tr');
+                                var status = row.find('.js-status');  // The element displaying the status
+                         var statusText = status.text().trim();  // This should now work if the text is properly set
+
+                        if (!statusText) {
+                            console.error('Status text is empty!');
+                            return;
+                        }
+                                var newStatus = status.text().trim() === 'Pending' ? 'Completed' : 'Pending';  // Toggle status
+
+                                // Update the status text and classes for visual indication
+                                status.text(newStatus).toggleClass('badge-light-success badge-light-warning');
+
+                                // Update the last updated timestamp
+                                row.find('.js-updated-on').html(lastUpdatedOn);
+
+                                // Move the row to the appropriate table
+                                if (newStatus === 'Completed') {
+                                    // Move row to the completed orders table
+                                    row.appendTo('#completedOrdersTable tbody');
+                                } else {
+                                    // Move row back to the pending orders table
+                                    row.appendTo('#pendingOrdersTable tbody');
+                                }
+
+                                // Show success message (You can customize this method)
+                                ShowSuccessMessage();
+                            },
+                            error: function () {
+                                // Show error message if something goes wrong
+                                ShowErrorMessage();
+                            }
+                        });
+                    }
+                });
+            });
+    </script>
+
+}
+

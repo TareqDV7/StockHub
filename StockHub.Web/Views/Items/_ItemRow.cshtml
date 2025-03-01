@@ -1,0 +1,45 @@
+﻿@using Bookify.Web.Core.Consts
+@model Item
+
+<tr>
+    <td>@Model.Name</td>
+    <td>@Model.Contents</td>
+    <td>@Model.Quantity</td>
+    <td>
+        <span class="badge badge-light-@(Model.IsDeleted ? "danger" : "success") js-status">
+            @(Model.IsDeleted ? "Deleted" : "Available")
+        </span>
+    </td>
+    @if (User.IsInRole(AppRoles.Admin))
+    {
+
+        <td>@Model.CreatedOn.ToString("MM/dd/yyyy")</td>
+        <td class="js-updated-on">@(Model.LastUpdatedOn.HasValue ? Model.LastUpdatedOn.Value.ToString("MM/dd/yyyy") : string.Empty)</td>
+    }
+    <td>
+        <div class="dropdown">
+            <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style=" color: white; border: none; border-radius: 5px; padding: 10px;">
+                <i class="fa-solid fa-cog"></i>
+                <span class="caret" style="color: black;"></span>
+            </button>
+
+            <ul class="dropdown-menu" style="border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                <li>
+                    <a class="btn btn-sm btn-outline btn-outline-dashed btn-active-light-primary js-render-modal"
+                       href="javascript:;"
+                       data-title="Edit Item"
+                       data-url="/Items/Edit/@Model.Id" data-update="true"
+                       style="transition: background-color 0.3s; padding: 8px 12px; display: block; text-align: center; border-radius: 5px;">
+                        Edit
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item js-toggle-status btn btn-sm btn-outline btn-outline-dashed btn-active-light-primary"
+                       href="javascript:;" data-url="/Items/ChangeStatus/@Model.Id" style="padding: 10px;">
+                        Toggle Status
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </td>
+</tr>
